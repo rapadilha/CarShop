@@ -24,9 +24,9 @@ export default class MongoModel<T> implements IModel<T> {
 
     return car;
   }
-  public async update(_id: string, obj: Partial<T>): Promise<T | null> {
+  public async update(_id: string, obj: Partial<T>): Promise<T & { _id: string } | null> {
     if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
-    const carUpdate = this._model.findByIdAndUpdate(
+    const carUpdate = await this._model.findByIdAndUpdate(
       { _id },
       { ...obj } as UpdateQuery<T>,
       { new: true },
@@ -34,7 +34,7 @@ export default class MongoModel<T> implements IModel<T> {
 
     if (!carUpdate) return null;
 
-    return carUpdate;
+    return carUpdate as T & { _id: string };
   }
   // delete(props: string): Promise<T | null> {
   //   throw new Error('Method not implemented.');
