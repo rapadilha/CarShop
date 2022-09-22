@@ -36,7 +36,8 @@ export default class MongoModel<T> implements IModel<T> {
 
     return carUpdate as T & { _id: string };
   }
-  // delete(props: string): Promise<T | null> {
-  //   throw new Error('Method not implemented.');
-  // }
+  async delete(_id: string): Promise<T | null> {
+    if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
+    return this._model.findByIdAndDelete({ _id });
+  }
 }

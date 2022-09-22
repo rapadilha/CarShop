@@ -35,13 +35,18 @@ export default class CarsService {
     if (!parsed.success) {
       throw parsed.error;
     }
-
-    console.log(parsed.data);
     
     const carUpdate = await this._cars.update(id, parsed.data);
 
     if (!carUpdate) throw Error(ErrorTypes.EntityNotFound);
 
     return carUpdate as ICar & { id: string };
+  }
+
+  async delete(_id: string): Promise<ICar | null> {
+    const car = await this._cars.delete(_id);
+    if (!car) throw new Error(ErrorTypes.EntityNotFound);
+
+    return car;
   }
 }
