@@ -1,5 +1,6 @@
-import { Model } from 'mongoose';
+import { Model, isValidObjectId } from 'mongoose';
 import { IModel } from '../interfaces/IModel';
+import { ErrorTypes } from '../middlewares/errorCatalog';
 
 export default class MongoModel<T> implements IModel<T> {
   private _model:Model<T>;
@@ -17,10 +18,12 @@ export default class MongoModel<T> implements IModel<T> {
     const all = this._model.find();
     return all;
   }
-  // readOne(props: string): Promise<T | null> {
-  //   if (!isValidObjectId(props)) throw new Error('Method readOne not implemented.');
-  //   this._model.findOne(props);
-  // }
+  public async readOne(_id: string): Promise<T | null> {
+    if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
+    const car = this._model.findOne({ _id });
+
+    return car;
+  }
   // update(props: string, T: object): Promise<T | null> {
   //   throw new Error('Method not implemented.');
   // }
