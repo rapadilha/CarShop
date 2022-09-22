@@ -15,4 +15,10 @@ export default class CarsService {
 
     return created;
   }
+
+  async read(): Promise<ICar[]> {
+    const allCars = await this._cars.read();
+
+    return allCars;
+  }
 }

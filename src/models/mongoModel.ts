@@ -13,10 +13,10 @@ export default class MongoModel<T> implements IModel<T> {
 
     return created;
   }
-  // read(): Promise<T[]> {
-  //   this._model.find();
-  //   throw new Error('Method read not implemented.');
-  // }
+  public async read(): Promise<T[]> {
+    const all = this._model.find();
+    return all;
+  }
   // readOne(props: string): Promise<T | null> {
   //   if (!isValidObjectId(props)) throw new Error('Method readOne not implemented.');
   //   this._model.findOne(props);
