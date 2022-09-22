@@ -29,4 +29,17 @@ export default class CarsService {
 
     return car;
   }
+
+  async update(id: string, obj:Partial<ICar>): Promise<ICar | null> {
+    const parsed = CarSchema.safeParse(obj);
+    if (!parsed.success) {
+      throw parsed.error;
+    }
+
+    const carUpdate = await this._cars.update(id, parsed.data);
+
+    if (!carUpdate) throw Error(ErrorTypes.EntityNotFound);
+
+    return carUpdate;
+  }
 }

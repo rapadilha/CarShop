@@ -1,4 +1,4 @@
-import { Model, isValidObjectId } from 'mongoose';
+import { Model, isValidObjectId, UpdateQuery } from 'mongoose';
 import { IModel } from '../interfaces/IModel';
 import { ErrorTypes } from '../middlewares/errorCatalog';
 
@@ -24,9 +24,18 @@ export default class MongoModel<T> implements IModel<T> {
 
     return car;
   }
-  // update(props: string, T: object): Promise<T | null> {
-  //   throw new Error('Method not implemented.');
-  // }
+  public async update(_id: string, obj: Partial<T>): Promise<T | null> {
+    if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
+    const carUpdate = this._model.findByIdAndUpdate(
+      { _id },
+      { ...obj } as UpdateQuery<T>,
+      { new: true },
+    );
+
+    if (!carUpdate) return null;
+
+    return carUpdate;
+  }
   // delete(props: string): Promise<T | null> {
   //   throw new Error('Method not implemented.');
   // }
