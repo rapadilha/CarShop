@@ -1,9 +1,11 @@
 import { z } from 'zod';
-import { IVehicle } from './IVehicle';
+import { VehicleSchema } from './IVehicle';
 
-const CarSchema = z.object({
-  doorsQty: z.number().int(),
-  seatsQty: z.number().int(),
-});
+const CarSchema = VehicleSchema.merge(z.object({
+  doorsQty: z.number().int().gte(2).lte(4),
+  seatsQty: z.number().int().gte(2).lte(7),
+}));
 
-export type ICar = IVehicle & z.infer<typeof CarSchema>;
+type ICar = z.infer<typeof CarSchema>;
+
+export { ICar, CarSchema };
